@@ -1,14 +1,37 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, Text, VStack, Heading } from "@chakra-ui/react";
+import WorkoutForm from "../components/WorkoutForm";
 
-const Dashboard = () => (
-  <Box p={4}>
-    <VStack spacing={4}>
-      <Text fontSize="2xl" fontWeight="bold">Dashboard</Text>
-      <Text>Steps: --</Text>
-      <Text>Calories Burned: --</Text>
-      <Text>Workout History: --</Text>
-    </VStack>
-  </Box>
-);
+const Dashboard = () => {
+  const [workouts, setWorkouts] = useState([]);
+
+  const addWorkout = (workout) => {
+    setWorkouts([...workouts, workout]);
+  };
+
+  return (
+    <Box p={4}>
+      <VStack spacing={4}>
+        <Heading as="h2" size="xl">Dashboard</Heading>
+        <WorkoutForm onAddWorkout={addWorkout} />
+        <Heading as="h3" size="lg" mt={8}>Workout History</Heading>
+        {workouts.length === 0 ? (
+          <Text>No workouts logged yet.</Text>
+        ) : (
+          <VStack spacing={4} width="full">
+            {workouts.map((workout, index) => (
+              <Box key={index} p={4} borderWidth={1} borderRadius="md" boxShadow="md" width="full">
+                <Text><strong>Date:</strong> {workout.date}</Text>
+                <Text><strong>Type:</strong> {workout.type}</Text>
+                <Text><strong>Duration:</strong> {workout.duration} minutes</Text>
+                <Text><strong>Calories Burned:</strong> {workout.calories}</Text>
+              </Box>
+            ))}
+          </VStack>
+        )}
+      </VStack>
+    </Box>
+  );
+};
 
 export default Dashboard;
